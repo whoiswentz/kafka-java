@@ -2,6 +2,6 @@ package kafka;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
-public interface ConsumerFunction {
-    void consume(ConsumerRecord<String, String> r);
+public interface ConsumerFunction<T> {
+    void consume(ConsumerRecord<String, T> r);
 }

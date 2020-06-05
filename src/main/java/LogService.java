@@ -1,6 +1,9 @@
 import kafka.KafkaService;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.common.serialization.StringDeserializer;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class LogService {
@@ -8,7 +11,9 @@ public class LogService {
         final var service = new KafkaService(
                 LogService.class.getName(),
                 Pattern.compile("ECOMMERCE.*"),
-                LogService::parse);
+                LogService::parse,
+                String.class,
+                Map.of(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName()));
         service.run();
     }
 
@@ -18,6 +23,7 @@ public class LogService {
                 " partition: " + r.partition() +
                 " offset: " + r.offset() +
                 " timestamp: " + r.timestamp() +
+                " value: " + r.value() +
                 " }");
     }
 }
