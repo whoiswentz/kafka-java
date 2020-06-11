@@ -1,3 +1,5 @@
+package io.wentz.models;
+
 public class Email {
     private final String subject;
     private final String body;
