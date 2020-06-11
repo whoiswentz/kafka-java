@@ -1,3 +1,7 @@
+package io.wentz;
+
+import io.wentz.models.Email;
+import io.wentz.models.Order;
 import kafka.KafkaDispatcher;
 
 import java.math.BigDecimal;
@@ -19,10 +23,7 @@ public class NewOrderMain {
                 final var amount = BigDecimal.valueOf(Math.random() * 5000 + 1);
 
                 final var order = new Order(userId, orderId, amount);
-                final var email = new Email(
-                        "New Order",
-                        "Thank, you for order, we are processing your order"
-                );
+                final var email = new Email("New Order", "Thank");
 
                 try {
                     orderDispatcher.send(NEW_ORDER_TOPIC, userId, order);
