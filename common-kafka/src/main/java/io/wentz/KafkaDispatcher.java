@@ -1,4 +1,4 @@
-package kafka;
+package io.wentz;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -27,14 +27,6 @@ public class KafkaDispatcher<T> implements Closeable {
         return properties;
     }
 
-    public void send(String topic, String id, T value) throws ExecutionException, InterruptedException {
-        final var orderRecord = new ProducerRecord<>(topic, id, value);
-        final var emailRecord = new ProducerRecord<>(topic, id, value);
-
-        producer.send(orderRecord, KafkaDispatcher::onCompletion).get();
-        producer.send(emailRecord, KafkaDispatcher::onCompletion).get();
-    }
-
     private static void onCompletion(RecordMetadata data, Exception e) {
         if (e != null) {
             e.printStackTrace();
@@ -48,6 +40,14 @@ public class KafkaDispatcher<T> implements Closeable {
                 " timestamp: " + data.timestamp() +
                 " }"
         );
+    }
+
+    public void send(String topic, String id, T value) throws ExecutionException, InterruptedException {
+        final var orderRecord = new ProducerRecord<>(topic, id, value);
+        final var emailRecord = new ProducerRecord<>(topic, id, value);
+
+        producer.send(orderRecord, KafkaDispatcher::onCompletion).get();
+        producer.send(emailRecord, KafkaDispatcher::onCompletion).get();
     }
 
     @Override

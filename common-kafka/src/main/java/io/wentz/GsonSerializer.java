@@ -1,4 +1,4 @@
-package kafka;
+package io.wentz;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

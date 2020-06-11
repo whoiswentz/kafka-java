@@ -1,7 +1,6 @@
 package io.wentz;
 
 import io.wentz.models.Order;
-import kafka.KafkaIngester;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.util.Map;

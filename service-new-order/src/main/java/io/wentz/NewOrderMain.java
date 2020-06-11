@@ -2,7 +2,6 @@ package io.wentz;
 
 import io.wentz.models.Email;
 import io.wentz.models.Order;
-import kafka.KafkaDispatcher;
 
 import java.math.BigDecimal;
 import java.util.UUID;
