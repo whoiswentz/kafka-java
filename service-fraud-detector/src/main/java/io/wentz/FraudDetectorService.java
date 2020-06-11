@@ -19,13 +19,13 @@ public class FraudDetectorService {
 
     private static void parse(ConsumerRecord<String, Order> r) {
         System.out.println("Processing new order");
-        System.out.println("Order: {" +
+        System.out.println("io.wentz.models.Order: {" +
                 " topic: " + r.topic() +
                 " partition: " + r.partition() +
                 " offset: " + r.offset() +
                 " timestamp: " + r.timestamp() +
                 " value: " + r.value() +
                 " }");
-        System.out.println("Order processed");
+        System.out.println("io.wentz.models.Order processed");
     }
 }

@@ -27,7 +27,7 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order{" +
+        return "io.wentz.models.Order{" +
                 "userId='" + userId + '\'' +
                 ", orderId='" + orderId + '\'' +
                 ", ammount=" + amount +
