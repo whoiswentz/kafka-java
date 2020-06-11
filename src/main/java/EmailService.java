@@ -1,4 +1,4 @@
-import kafka.KafkaService;
+import kafka.KafkaIngester;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.util.Map;
@@ -8,7 +8,7 @@ public class EmailService {
         final var groupId = EmailService.class.getName();
         final var topic = "ECOMMERCE_SEND_EMAIL";
 
-        try (final var service = new KafkaService<Email>(groupId, topic, EmailService::parse, Email.class, Map.of())) {
+        try (final var service = new KafkaIngester<Email>(groupId, topic, EmailService::parse, Email.class, Map.of())) {
             service.run();
         }
     }

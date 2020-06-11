@@ -14,25 +14,25 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 
-public class KafkaService<T> implements Closeable {
+public class KafkaIngester<T> implements Closeable {
     private final KafkaConsumer<String, T> consumer;
     private final ConsumerFunction parse;
     private final Class<T> type;
     private Map<String, String> properties;
 
-    private KafkaService(String groupId, ConsumerFunction parse, Class<T> type, Map<String, String> properties) {
+    private KafkaIngester(String groupId, ConsumerFunction parse, Class<T> type, Map<String, String> properties) {
         this.type = type;
         this.properties = properties;
         this.consumer = new KafkaConsumer<>(getProperties(type, groupId, properties));
         this.parse = parse;
     }
 
-    public KafkaService(String groupId, String topic, ConsumerFunction parse, Class<T> type, Map<String, String> properties) {
+    public KafkaIngester(String groupId, String topic, ConsumerFunction parse, Class<T> type, Map<String, String> properties) {
         this(groupId, parse, type, properties);
         this.consumer.subscribe(Collections.singletonList(topic));
     }
 
-    public KafkaService(String groupId, Pattern pattern, ConsumerFunction parse, Class<T> type, Map<String, String> properties) {
+    public KafkaIngester(String groupId, Pattern pattern, ConsumerFunction parse, Class<T> type, Map<String, String> properties) {
         this(groupId, parse, type, properties);
         this.consumer.subscribe(pattern);
     }

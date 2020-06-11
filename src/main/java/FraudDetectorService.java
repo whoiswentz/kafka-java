@@ -1,11 +1,11 @@
-import kafka.KafkaService;
+import kafka.KafkaIngester;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.util.Map;
 
 public class FraudDetectorService {
     public static void main(String[] args) {
-        final var service = new KafkaService<>(
+        final var service = new KafkaIngester<>(
                 FraudDetectorService.class.getName(),
                 "ECOMMERCE_NEW_ORDER",
                 FraudDetectorService::parse,

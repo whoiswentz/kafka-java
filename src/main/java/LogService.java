@@ -1,4 +1,4 @@
-import kafka.KafkaService;
+import kafka.KafkaIngester;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class LogService {
     public static void main(String[] args) {
-        final var service = new KafkaService(
+        final var service = new KafkaIngester(
                 LogService.class.getName(),
                 Pattern.compile("ECOMMERCE.*"),
                 LogService::parse,
