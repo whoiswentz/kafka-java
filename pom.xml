@@ -12,6 +12,8 @@
         <module>service-email</module>
         <module>service-fraud-detector</module>
         <module>service-new-order</module>
+        <module>service-log</module>
+        <module>common-kafka</module>
     </modules>
 
     <properties>
