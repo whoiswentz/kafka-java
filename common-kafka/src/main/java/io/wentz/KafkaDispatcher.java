@@ -30,16 +30,7 @@ public class KafkaDispatcher<T> implements Closeable {
     private static void onCompletion(RecordMetadata data, Exception e) {
         if (e != null) {
             e.printStackTrace();
-            return;
         }
-
-        System.out.println("Message: {" +
-                " topic: " + data.topic() +
-                " partition: " + data.partition() +
-                " offset: " + data.offset() +
-                " timestamp: " + data.timestamp() +
-                " }"
-        );
     }
 
     public void send(String topic, String id, T value) throws ExecutionException, InterruptedException {
