@@ -13,18 +13,6 @@ public class Order {
         this.amount = ammount;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public BigDecimal getAmmount() {
-        return amount;
-    }
-
     @Override
     public String toString() {
         return "io.wentz.models.Order{" +

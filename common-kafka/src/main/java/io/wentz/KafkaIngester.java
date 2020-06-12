@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 
@@ -44,7 +45,11 @@ public class KafkaIngester<T> implements Closeable {
                 continue;
             }
             for (ConsumerRecord<String, T> record : records) {
-                this.parse.consume(record);
+                try {
+                    this.parse.consume(record);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

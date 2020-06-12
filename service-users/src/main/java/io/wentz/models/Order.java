@@ -13,17 +13,13 @@ public class Order {
         this.amount = ammount;
     }
 
-    public boolean isFraud() {
-        return amount.compareTo(new BigDecimal("4500")) >= 0;
-    }
-
-    public String getUserId() {
-        return userId;
+    public String getUserEmail() {
+        return "email";
     }
 
     @Override
     public String toString() {
-        return "Order{" +
+        return "io.wentz.models.Order{" +
                 "userId='" + userId + '\'' +
                 ", orderId='" + orderId + '\'' +
                 ", ammount=" + amount +
