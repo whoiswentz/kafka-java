@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
+import java.util.UUID;
 
 public class CreateUserService {
     private static final String klass = CreateUserService.class.getName();
@@ -17,25 +17,33 @@ public class CreateUserService {
     public static void main(String[] args) throws SQLException {
         String url = "jdbc:sqlite:target/users_database.db";
         connection = DriverManager.getConnection(url);
-        connection.createStatement().execute("create table users (" +
-                "uuid varchar(200) primary key," +
-                "email varchar(200))");
+
+        try {
+            connection.createStatement()
+                    .execute("create table users (" +
+                            "uuid varchar(200) primary key," +
+                            "email varchar(200))"
+                    );
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         try (var ingester = new KafkaIngester<>(klass, newOrderTopic, CreateUserService::parse, Order.class, Map.of())) {
             ingester.run();
         }
     }
 
     private static void parse(ConsumerRecord<String, Order> r) throws SQLException {
-        Order order = r.value();
+        System.out.println(r.value().toString());
 
+        Order order = r.value();
         if (isNewUser(order.getUserEmail())) {
             insertUser(order.getUserEmail());
         }
     }
 
     private static void insertUser(String email) throws SQLException {
-         var insert = connection.prepareStatement("insert into users (uuid, email) values (?, ?)");
-        insert.setString(1, "uuid");
+        var insert = connection.prepareStatement("insert into users (uuid, email) values (?, ?)");
+        insert.setString(1, UUID.randomUUID().toString());
         insert.setString(2, email);
     }
 

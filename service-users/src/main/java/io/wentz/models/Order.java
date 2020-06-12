@@ -3,26 +3,26 @@ package io.wentz.models;
 import java.math.BigDecimal;
 
 public class Order {
-    private final String userId;
     private final String orderId;
     private final BigDecimal amount;
+    private final String email;
 
-    public Order(String userId, String orderId, BigDecimal ammount) {
-        this.userId = userId;
+    public Order( String orderId, BigDecimal ammount, String email) {
         this.orderId = orderId;
         this.amount = ammount;
+        this.email = email;
     }
 
     public String getUserEmail() {
-        return "email";
+        return email;
     }
 
     @Override
     public String toString() {
-        return "io.wentz.models.Order{" +
-                "userId='" + userId + '\'' +
-                ", orderId='" + orderId + '\'' +
+        return "Order{" +
+                "orderId='" + orderId + '\'' +
                 ", ammount=" + amount +
+                ", email=" + email +
                 '}';
     }
 }
