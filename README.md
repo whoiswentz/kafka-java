@@ -10,3 +10,5 @@ kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 1 -
 kafka-console-producer --broker-list localhost:9092 —topic ECOMMERCE_NEW_ORDER
 
 kafka-console-consumer --bootstrap-server localhost:9092 --topic ECOMMERCE_NEW_ORDER --from-beginning# kafka-java
+
+bin/kafka-topics.sh --describe --bootstrap-server localhost:9092
