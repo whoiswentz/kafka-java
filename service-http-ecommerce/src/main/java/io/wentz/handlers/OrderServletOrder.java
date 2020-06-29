@@ -18,6 +18,8 @@ public class OrderServletOrder extends HttpServlet {
     final KafkaDispatcher<Order> orderDispatcher = new KafkaDispatcher<>();
     final KafkaDispatcher<Email> emailDispatcher = new KafkaDispatcher<>();
 
+    private static final String NEW_ORDER_TOPIC = "ECOMMERCE_NEW_ORDER";
+    private static final String EMAIL_ORDER_TOPIC = "ECOMMERCE_SEND_EMAIL";
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -41,8 +43,8 @@ public class OrderServletOrder extends HttpServlet {
         final var email = new Email("New Order", "Thank");
 
         try {
-            orderDispatcher.send("NEW_ORDER_TOPIC", userEmail, order);
-            emailDispatcher.send("EMAIL_ORDER_TOPIC", userEmail, email);
+            orderDispatcher.send(NEW_ORDER_TOPIC, userEmail, order);
+            emailDispatcher.send(EMAIL_ORDER_TOPIC, userEmail, email);
         } catch (ExecutionException | InterruptedException e) {
             throw new ServletException(e);
         }

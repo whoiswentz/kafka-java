@@ -32,14 +32,12 @@ public class KafkaDispatcher<T> implements Closeable {
         if (e != null) {
             e.printStackTrace();
         }
+        System.out.println("Send " + data.topic() + ":::partition " + data.partition() + "/offset " + data.offset() + "/timestamp " + data.timestamp());
     }
 
     public void send(String topic, String id, T value) throws ExecutionException, InterruptedException {
-        final var orderRecord = new ProducerRecord<>(topic, id, value);
-        final var emailRecord = new ProducerRecord<>(topic, id, value);
-
-        producer.send(orderRecord, KafkaDispatcher::onCompletion).get();
-        producer.send(emailRecord, KafkaDispatcher::onCompletion).get();
+        final var record = new ProducerRecord<>(topic, id, value);
+        producer.send(record, KafkaDispatcher::onCompletion).get();
     }
 
     @Override

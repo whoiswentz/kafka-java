@@ -45,6 +45,7 @@ public class CreateUserService {
         var insert = connection.prepareStatement("insert into users (uuid, email) values (?, ?)");
         insert.setString(1, UUID.randomUUID().toString());
         insert.setString(2, email);
+        insert.execute();
     }
 
     private static boolean isNewUser(String email) throws SQLException {
