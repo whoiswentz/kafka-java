@@ -1,5 +1,6 @@
 package io.wentz.handlers;
 
+import io.wentz.CorrelationId;
 import io.wentz.KafkaDispatcher;
 import io.wentz.models.User;
 import jakarta.servlet.ServletConfig;
@@ -29,10 +30,13 @@ public class GenerateReadingReport extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
         System.out.println("doing the get");
         try {
+            String className = GenerateReadingReport.class.getSimpleName();
+
             batchDispatcher.send(
-                    "SEND_MESSAGE_TO_ALL_USERS",
-                    "USER_GENERATE_READING_REPORT",
-                    "USER_GENERATE_READING_REPORT");
+                    "ECOMMERCE_SEND_MESSAGE_TO_ALL_USERS",
+                    "ECOMMERCE_USER_GENERATE_READING_REPORT",
+                    new CorrelationId(className),
+                    "ECOMMERCE_USER_GENERATE_READING_REPORT");
 
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().println("New order Sent");

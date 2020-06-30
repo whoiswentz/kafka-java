@@ -1,5 +1,6 @@
 package io.wentz.handlers;
 
+import io.wentz.CorrelationId;
 import io.wentz.KafkaDispatcher;
 import io.wentz.models.Email;
 import io.wentz.models.Order;
@@ -43,8 +44,9 @@ public class OrderServletOrder extends HttpServlet {
         final var email = new Email("New Order", "Thank");
 
         try {
-            orderDispatcher.send(NEW_ORDER_TOPIC, userEmail, order);
-            emailDispatcher.send(EMAIL_ORDER_TOPIC, userEmail, email);
+            var className = OrderServletOrder.class.getSimpleName();
+            orderDispatcher.send(NEW_ORDER_TOPIC, userEmail, new CorrelationId(className), order);
+            emailDispatcher.send(EMAIL_ORDER_TOPIC, userEmail, new CorrelationId(className), email);
         } catch (ExecutionException | InterruptedException e) {
             throw new ServletException(e);
         }

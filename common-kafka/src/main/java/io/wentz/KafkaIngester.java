@@ -18,23 +18,21 @@ import java.util.regex.Pattern;
 public class KafkaIngester<T> implements Closeable {
     private final KafkaConsumer<String, Message<T>> consumer;
     private final ConsumerFunction<T> parse;
-    private final Class<T> type;
     private Map<String, String> properties;
 
-    private KafkaIngester(String groupId, ConsumerFunction<T> parse, Class<T> type, Map<String, String> properties) {
-        this.type = type;
+    private KafkaIngester(String groupId, ConsumerFunction<T> parse, Map<String, String> properties) {
         this.properties = properties;
-        this.consumer = new KafkaConsumer<>(getProperties(type, groupId, properties));
+        this.consumer = new KafkaConsumer<>(getProperties(groupId, properties));
         this.parse = parse;
     }
 
-    public KafkaIngester(String groupId, String topic, ConsumerFunction<T> parse, Class<T> type, Map<String, String> properties) {
-        this(groupId, parse, type, properties);
+    public KafkaIngester(String groupId, String topic, ConsumerFunction<T> parse, Map<String, String> properties) {
+        this(groupId, parse, properties);
         this.consumer.subscribe(Collections.singletonList(topic));
     }
 
-    public KafkaIngester(String groupId, Pattern pattern, ConsumerFunction<T> parse, Class<T> type, Map<String, String> properties) {
-        this(groupId, parse, type, properties);
+    public KafkaIngester(String groupId, Pattern pattern, ConsumerFunction<T> parse, Map<String, String> properties) {
+        this(groupId, parse, properties);
         this.consumer.subscribe(pattern);
     }
 
@@ -54,7 +52,7 @@ public class KafkaIngester<T> implements Closeable {
         }
     }
 
-    private Properties getProperties(Class<T> type, String groupId, Map<String, String> overrideProperties) {
+    private Properties getProperties(String groupId, Map<String, String> overrideProperties) {
         Properties properties = new Properties();
 
         properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");

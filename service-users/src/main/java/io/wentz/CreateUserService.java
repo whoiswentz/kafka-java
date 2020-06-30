@@ -28,7 +28,7 @@ public class CreateUserService {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        try (var ingester = new KafkaIngester<>(klass, newOrderTopic, CreateUserService::parse, Order.class, Map.of())) {
+        try (var ingester = new KafkaIngester<>(klass, newOrderTopic, CreateUserService::parse, Map.of())) {
             ingester.run();
         }
     }

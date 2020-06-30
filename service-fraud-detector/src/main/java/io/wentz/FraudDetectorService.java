@@ -15,7 +15,6 @@ public class FraudDetectorService {
             klass,
             newOrderTopic,
             FraudDetectorService::parse,
-            Order.class,
             Map.of());
     private static final KafkaDispatcher<Order> dispatcher = new KafkaDispatcher<>();
 
@@ -24,13 +23,22 @@ public class FraudDetectorService {
     }
 
     private static void parse(ConsumerRecord<String, Message<Order>> r) throws ExecutionException, InterruptedException {
-        Order order = r.value().getPayload();
+        String className = FraudDetectorService.class.getSimpleName();
+
+        var message = r.value();
+        var order = message.getPayload();
         if (order.isFraud()) {
-            System.out.println("Order is a fraud: " + order);
-            dispatcher.send(rejectedOrderTopic, order.getEmail(), order);
+            dispatcher.send(
+                    rejectedOrderTopic,
+                    order.getEmail(),
+                    message.getId().continueWith(className),
+                    order);
             return;
         }
-        System.out.println("Order processed: " + order);
-        dispatcher.send(approvedOrderTopic, order.getEmail(), order);
+        dispatcher.send(
+                approvedOrderTopic,
+                order.getEmail(),
+                message.getId().continueWith(className),
+                order);
     }
 }

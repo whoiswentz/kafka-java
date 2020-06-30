@@ -30,11 +30,9 @@ public class BatchSendMessageService {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        try (var ingester = new KafkaIngester<>(
-                klass,
-                "SEND_MESSAGE_TO_ALL_USERS",
+        try (var ingester = new KafkaIngester<>(klass,
+                "ECOMMERCE_SEND_MESSAGE_TO_ALL_USERS",
                 BatchSendMessageService::parse,
-                String.class,
                 Map.of())
         ) {
             ingester.run();
@@ -42,9 +40,15 @@ public class BatchSendMessageService {
     }
 
     private static void parse(ConsumerRecord<String, Message<String>> r) throws SQLException, ExecutionException, InterruptedException {
+        String className = BatchSendMessageService.class.getSimpleName();
+
         for (User user : getAllUsers()) {
-            System.out.println(r.value());
-            userDispatcher.send(r.value().getPayload(), user.getUUID(), user);
+            var message = r.value();
+            userDispatcher.send(
+                    message.getPayload(),
+                    user.getUUID(),
+                    message.getId().continueWith(className),
+                    user);
         }
     }
 

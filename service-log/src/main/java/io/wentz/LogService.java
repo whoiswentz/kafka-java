@@ -13,7 +13,6 @@ public class LogService {
                 LogService.class.getName(),
                 Pattern.compile("ECOMMERCE.*"),
                 LogService::parse,
-                String.class,
                 Map.of(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName()));
         service.run();
     }
@@ -24,7 +23,7 @@ public class LogService {
                 " partition: " + r.partition() +
                 " offset: " + r.offset() +
                 " timestamp: " + r.timestamp() +
-                " value: " + r.value().getPayload() +
+                " value: " + r.value()+
                 " }");
     }
 }

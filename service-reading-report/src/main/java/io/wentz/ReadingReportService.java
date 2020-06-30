@@ -13,9 +13,8 @@ public class ReadingReportService {
     private static final String klass = ReadingReportService.class.getName();
     private static final KafkaIngester<User> ingester = new KafkaIngester<>(
             klass,
-            "USER_GENERATE_READING_REPORT",
+            "ECOMMERCE_USER_GENERATE_READING_REPORT",
             ReadingReportService::parse,
-            User.class,
             Map.of());
 
     private static final Path SOURCE = new File("src/main/resources/report.txt").toPath();

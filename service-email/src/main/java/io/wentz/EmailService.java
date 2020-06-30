@@ -10,7 +10,7 @@ public class EmailService {
         final var groupId = EmailService.class.getName();
         final var topic = "ECOMMERCE_SEND_EMAIL";
 
-        try (final var service = new KafkaIngester<>(groupId, topic, EmailService::parse, Email.class, Map.of())) {
+        try (final var service = new KafkaIngester<>(groupId, topic, EmailService::parse, Map.of())) {
             service.run();
         }
     }
