@@ -15,13 +15,14 @@ public class EmailService {
         }
     }
 
-    private static void parse(ConsumerRecord<String, String> r) {
-        System.out.println("Processing io.wentz.models.Email");
+    private static void parse(ConsumerRecord<String, Message<Email>> r) {
+        System.out.println("Processing Email");
         System.out.println("io.wentz.models.Email: {" +
                 " topic: " + r.topic() +
                 " partition: " + r.partition() +
                 " offset: " + r.offset() +
                 " timestamp: " + r.timestamp() +
+                " message: " + r.value().getPayload() +
                 " }");
         System.out.println("io.wentz.models.Email send");
     }

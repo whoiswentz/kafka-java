@@ -24,10 +24,10 @@ public class ReadingReportService {
         ingester.run();
     }
 
-    private static void parse(ConsumerRecord<String, User> r) throws IOException {
+    private static void parse(ConsumerRecord<String, Message<User>> r) throws IOException {
         System.out.println(r.value());
 
-        var user = r.value();
+        var user = r.value().getPayload();
         var target = new File(user.getReportPath());
         IO.copy(SOURCE, target);
         IO.append(target, "Created for " + user.getUUID());

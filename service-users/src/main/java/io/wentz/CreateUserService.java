@@ -1,6 +1,7 @@
 package io.wentz;
 
 import io.wentz.models.Order;
+import io.wentz.models.User;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.sql.Connection;
@@ -32,10 +33,10 @@ public class CreateUserService {
         }
     }
 
-    private static void parse(ConsumerRecord<String, Order> r) throws SQLException {
+    private static void parse(ConsumerRecord<String, Message<Order>> r) throws SQLException {
         System.out.println(r.value().toString());
 
-        Order order = r.value();
+        Order order = r.value().getPayload();
         if (isNewUser(order.getUserEmail())) {
             insertUser(order.getUserEmail());
         }

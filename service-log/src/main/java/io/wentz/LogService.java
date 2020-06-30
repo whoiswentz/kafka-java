@@ -18,13 +18,13 @@ public class LogService {
         service.run();
     }
 
-    private static void parse(ConsumerRecord<String, String> r) {
+    private static void parse(ConsumerRecord<String, Message<String>> r) {
         System.out.println("LOG: {" +
                 " topic: " + r.topic() +
                 " partition: " + r.partition() +
                 " offset: " + r.offset() +
                 " timestamp: " + r.timestamp() +
-                " value: " + r.value() +
+                " value: " + r.value().getPayload() +
                 " }");
     }
 }

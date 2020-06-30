@@ -16,24 +16,24 @@ import java.util.regex.Pattern;
 
 
 public class KafkaIngester<T> implements Closeable {
-    private final KafkaConsumer<String, T> consumer;
-    private final ConsumerFunction parse;
+    private final KafkaConsumer<String, Message<T>> consumer;
+    private final ConsumerFunction<T> parse;
     private final Class<T> type;
     private Map<String, String> properties;
 
-    private KafkaIngester(String groupId, ConsumerFunction parse, Class<T> type, Map<String, String> properties) {
+    private KafkaIngester(String groupId, ConsumerFunction<T> parse, Class<T> type, Map<String, String> properties) {
         this.type = type;
         this.properties = properties;
         this.consumer = new KafkaConsumer<>(getProperties(type, groupId, properties));
         this.parse = parse;
     }
 
-    public KafkaIngester(String groupId, String topic, ConsumerFunction parse, Class<T> type, Map<String, String> properties) {
+    public KafkaIngester(String groupId, String topic, ConsumerFunction<T> parse, Class<T> type, Map<String, String> properties) {
         this(groupId, parse, type, properties);
         this.consumer.subscribe(Collections.singletonList(topic));
     }
 
-    public KafkaIngester(String groupId, Pattern pattern, ConsumerFunction parse, Class<T> type, Map<String, String> properties) {
+    public KafkaIngester(String groupId, Pattern pattern, ConsumerFunction<T> parse, Class<T> type, Map<String, String> properties) {
         this(groupId, parse, type, properties);
         this.consumer.subscribe(pattern);
     }
@@ -44,7 +44,7 @@ public class KafkaIngester<T> implements Closeable {
             if (records.isEmpty()) {
                 continue;
             }
-            for (ConsumerRecord<String, T> record : records) {
+            for (ConsumerRecord<String, Message<T>> record : records) {
                 try {
                     this.parse.consume(record);
                 } catch (Exception e) {
@@ -63,7 +63,6 @@ public class KafkaIngester<T> implements Closeable {
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         properties.setProperty(ConsumerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString());
         properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1");
-        properties.setProperty(GsonDeserializer.TYPE_CONFIG, type.getName());
         properties.putAll(overrideProperties);
         return properties;
     }

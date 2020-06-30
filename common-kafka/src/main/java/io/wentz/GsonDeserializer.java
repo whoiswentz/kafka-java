@@ -6,13 +6,14 @@ import org.apache.kafka.common.serialization.Deserializer;
 
 import java.util.Map;
 
-public class GsonDeserializer<T> implements Deserializer<T> {
-    public static final String TYPE_CONFIG = "io.wentz.type_config";
-    private final Gson gson = new GsonBuilder().create();
+public class GsonDeserializer implements Deserializer<Message> {
+    // public static final String TYPE_CONFIG = "io.wentz.type_config";
+    private final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Message.class, new MessageTypeAdapter())
+            .create();
+    // private Class<T> type;
 
-    private Class<T> type;
-
-    @Override
+    /*@Override
     public void configure(Map<String, ?> configs, boolean isKey) {
         String typeName = String.valueOf(configs.get(TYPE_CONFIG));
         try {
@@ -20,10 +21,10 @@ public class GsonDeserializer<T> implements Deserializer<T> {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
+    }*/
 
     @Override
-    public T deserialize(String s, byte[] bytes) {
-        return gson.fromJson(new String(bytes), type);
+    public Message deserialize(String s, byte[] bytes) {
+        return gson.fromJson(new String(bytes), Message.class);
     }
 }

@@ -41,10 +41,10 @@ public class BatchSendMessageService {
         }
     }
 
-    private static void parse(ConsumerRecord<String, String> r) throws SQLException, ExecutionException, InterruptedException {
+    private static void parse(ConsumerRecord<String, Message<String>> r) throws SQLException, ExecutionException, InterruptedException {
         for (User user : getAllUsers()) {
             System.out.println(r.value());
-            userDispatcher.send(r.value(), user.getUUID(), user);
+            userDispatcher.send(r.value().getPayload(), user.getUUID(), user);
         }
     }
 

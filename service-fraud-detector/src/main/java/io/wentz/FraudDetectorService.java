@@ -23,8 +23,8 @@ public class FraudDetectorService {
         ingester.run();
     }
 
-    private static void parse(ConsumerRecord<String, Order> r) throws ExecutionException, InterruptedException {
-        Order order = r.value();
+    private static void parse(ConsumerRecord<String, Message<Order>> r) throws ExecutionException, InterruptedException {
+        Order order = r.value().getPayload();
         if (order.isFraud()) {
             System.out.println("Order is a fraud: " + order);
             dispatcher.send(rejectedOrderTopic, order.getEmail(), order);
