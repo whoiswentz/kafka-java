@@ -46,7 +46,7 @@ public class OrderServletOrder extends HttpServlet {
         try {
             var className = OrderServletOrder.class.getSimpleName();
             orderDispatcher.send(NEW_ORDER_TOPIC, userEmail, new CorrelationId(className), order);
-            emailDispatcher.send(EMAIL_ORDER_TOPIC, userEmail, new CorrelationId(className), email);
+            emailDispatcher.sendAsync(EMAIL_ORDER_TOPIC, userEmail, new CorrelationId(className), email);
         } catch (ExecutionException | InterruptedException e) {
             throw new ServletException(e);
         }

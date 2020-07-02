@@ -17,7 +17,7 @@ public class BatchSendMessageService {
     private static final String klass = BatchSendMessageService.class.getName();
     private static Connection connection;
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, ExecutionException, InterruptedException {
         String url = "jdbc:sqlite:target/users_database.db";
         connection = DriverManager.getConnection(url);
 
@@ -44,11 +44,12 @@ public class BatchSendMessageService {
 
         for (User user : getAllUsers()) {
             var message = r.value();
-            userDispatcher.send(
+            userDispatcher.sendAsync(
                     message.getPayload(),
                     user.getUUID(),
                     message.getId().continueWith(className),
                     user);
+            System.out.println("I Think that I send");
         }
     }
 

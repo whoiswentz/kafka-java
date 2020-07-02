@@ -18,7 +18,7 @@ public class FraudDetectorService {
             Map.of());
     private static final KafkaDispatcher<Order> dispatcher = new KafkaDispatcher<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         ingester.run();
     }
 

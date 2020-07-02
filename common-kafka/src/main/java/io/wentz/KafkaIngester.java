@@ -14,11 +14,17 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
-
+/**
+ * KafkaIngester is the abstraction to a kafka
+ * client that consumes records from a Kafka cluster.
+ *
+ * @author Vinicios Wentz
+ * @param <T>
+ */
 public class KafkaIngester<T> implements Closeable {
     private final KafkaConsumer<String, Message<T>> consumer;
     private final ConsumerFunction<T> parse;
-    private Map<String, String> properties;
+    private final Map<String, String> properties;
 
     private KafkaIngester(String groupId, ConsumerFunction<T> parse, Map<String, String> properties) {
         this.properties = properties;
@@ -36,22 +42,44 @@ public class KafkaIngester<T> implements Closeable {
         this.consumer.subscribe(pattern);
     }
 
-    public void run() {
-        while (true) {
-            var records = consumer.poll(Duration.ofMillis(100));
-            if (records.isEmpty()) {
-                continue;
-            }
-            for (ConsumerRecord<String, Message<T>> record : records) {
-                try {
-                    this.parse.consume(record);
-                } catch (Exception e) {
-                    e.printStackTrace();
+    /**
+     * run method will start to "listen" the
+     * messages from the topic that has configured.
+     */
+    public void run() throws ExecutionException, InterruptedException {
+        try (var deadLetterDispatcher = new KafkaDispatcher<>()) {
+            while (true) {
+                var records = consumer.poll(Duration.ofMillis(100));
+                if (records.isEmpty()) {
+                    continue;
+                }
+                for (ConsumerRecord<String, Message<T>> record : records) {
+                    try {
+                        this.parse.consume(record);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+
+                        var message = record.value();
+                        deadLetterDispatcher.send(
+                                "ECOMMERCE_DEADLETTER",
+                                message.getId().toString(),
+                                message.getId().continueWith("DeadLetter"),
+                                new GsonSerializer<>().serialize("", message)
+                        );
+                    }
                 }
             }
         }
     }
 
+    /**
+     * Consumer configuration method, should
+     * be used for custom configuration.
+     *
+     * @param groupId - groupId of the consumer
+     * @param overrideProperties - properties that you want to override
+     * @return the properties that will be configure the consumer
+     */
     private Properties getProperties(String groupId, Map<String, String> overrideProperties) {
         Properties properties = new Properties();
 

@@ -9,6 +9,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import java.io.Closeable;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class KafkaDispatcher<T> implements Closeable {
     private final KafkaProducer<String, Message<T>> producer;
@@ -36,9 +37,13 @@ public class KafkaDispatcher<T> implements Closeable {
     }
 
     public void send(String topic, String key, CorrelationId id, T payload) throws ExecutionException, InterruptedException {
+        sendAsync(topic, key, id, payload).get();
+    }
+
+    public Future<RecordMetadata> sendAsync(String topic, String key, CorrelationId id, T payload) {
         final var message = new Message<>(id, payload);
         final var record = new ProducerRecord<>(topic, key, message);
-        producer.send(record, KafkaDispatcher::onCompletion).get();
+        return producer.send(record, KafkaDispatcher::onCompletion);
     }
 
     @Override

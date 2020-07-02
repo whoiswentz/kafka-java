@@ -4,9 +4,10 @@ import io.wentz.models.Email;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class EmailService {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         final var groupId = EmailService.class.getName();
         final var topic = "ECOMMERCE_SEND_EMAIL";
 
@@ -24,7 +25,7 @@ public class EmailService {
                 " timestamp: " + r.timestamp() +
                 " message: " + r.value().getPayload() +
                 " }");
-        System.out.println("io.wentz.models.Email send");
+        System.out.println("Email send");
     }
 
 

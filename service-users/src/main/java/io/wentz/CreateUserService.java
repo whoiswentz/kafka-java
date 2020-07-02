@@ -9,13 +9,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 public class CreateUserService {
     private static final String klass = CreateUserService.class.getName();
     private static final String newOrderTopic = "ECOMMERCE_NEW_ORDER";
     private static Connection connection;
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, ExecutionException, InterruptedException {
         String url = "jdbc:sqlite:target/users_database.db";
         connection = DriverManager.getConnection(url);
 
