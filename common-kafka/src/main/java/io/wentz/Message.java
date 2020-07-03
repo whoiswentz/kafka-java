@@ -1,5 +1,7 @@
 package io.wentz;
 
+import io.wentz.CorrelationId;
+
 public class Message<T> {
 
     private final CorrelationId id;

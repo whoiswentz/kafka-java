@@ -1,8 +1,7 @@
 package io.wentz.handlers;
 
 import io.wentz.CorrelationId;
-import io.wentz.KafkaDispatcher;
-import io.wentz.models.User;
+import io.wentz.dispatcher.KafkaDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;

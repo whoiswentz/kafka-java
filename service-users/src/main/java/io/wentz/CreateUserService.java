@@ -1,7 +1,7 @@
 package io.wentz;
 
+import io.wentz.ingester.KafkaIngester;
 import io.wentz.models.Order;
-import io.wentz.models.User;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.sql.Connection;

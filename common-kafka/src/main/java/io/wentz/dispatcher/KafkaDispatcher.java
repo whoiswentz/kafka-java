@@ -1,5 +1,7 @@
-package io.wentz;
+package io.wentz.dispatcher;
 
+import io.wentz.CorrelationId;
+import io.wentz.Message;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -41,7 +43,7 @@ public class KafkaDispatcher<T> implements Closeable {
     }
 
     public Future<RecordMetadata> sendAsync(String topic, String key, CorrelationId id, T payload) {
-        final var message = new Message<>(id, payload);
+        final var message = new Message<>(id.continueWith("_" + topic), payload);
         final var record = new ProducerRecord<>(topic, key, message);
         return producer.send(record, KafkaDispatcher::onCompletion);
     }

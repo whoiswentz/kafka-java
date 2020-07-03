@@ -1,10 +1,10 @@
-package io.wentz;
+package io.wentz.ingester;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.wentz.MessageTypeAdapter;
+import io.wentz.Message;
 import org.apache.kafka.common.serialization.Deserializer;
-
-import java.util.Map;
 
 public class GsonDeserializer implements Deserializer<Message> {
     // public static final String TYPE_CONFIG = "io.wentz.type_config";

@@ -1,7 +1,7 @@
 package io.wentz.handlers;
 
 import io.wentz.CorrelationId;
-import io.wentz.KafkaDispatcher;
+import io.wentz.dispatcher.KafkaDispatcher;
 import io.wentz.models.Email;
 import io.wentz.models.Order;
 import jakarta.servlet.ServletConfig;
@@ -17,10 +17,9 @@ import java.util.concurrent.ExecutionException;
 
 public class OrderServletOrder extends HttpServlet {
     final KafkaDispatcher<Order> orderDispatcher = new KafkaDispatcher<>();
-    final KafkaDispatcher<Email> emailDispatcher = new KafkaDispatcher<>();
 
     private static final String NEW_ORDER_TOPIC = "ECOMMERCE_NEW_ORDER";
-    private static final String EMAIL_ORDER_TOPIC = "ECOMMERCE_SEND_EMAIL";
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -30,7 +29,6 @@ public class OrderServletOrder extends HttpServlet {
     public void destroy() {
         super.destroy();
         orderDispatcher.close();
-        emailDispatcher.close();
     }
 
     @Override
@@ -41,12 +39,10 @@ public class OrderServletOrder extends HttpServlet {
         final var orderId = UUID.randomUUID().toString();
 
         final var order = new Order(orderId, amount, userEmail);
-        final var email = new Email("New Order", "Thank");
 
         try {
             var className = OrderServletOrder.class.getSimpleName();
             orderDispatcher.send(NEW_ORDER_TOPIC, userEmail, new CorrelationId(className), order);
-            emailDispatcher.sendAsync(EMAIL_ORDER_TOPIC, userEmail, new CorrelationId(className), email);
         } catch (ExecutionException | InterruptedException e) {
             throw new ServletException(e);
         }

@@ -1,5 +1,10 @@
-package io.wentz;
+package io.wentz.ingester;
 
+import io.wentz.Message;
+import io.wentz.dispatcher.GsonSerializer;
+import io.wentz.dispatcher.KafkaDispatcher;
+import io.wentz.ingester.ConsumerFunction;
+import io.wentz.ingester.GsonDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;

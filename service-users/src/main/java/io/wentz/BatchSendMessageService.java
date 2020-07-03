@@ -1,5 +1,7 @@
 package io.wentz;
 
+import io.wentz.dispatcher.KafkaDispatcher;
+import io.wentz.ingester.KafkaIngester;
 import io.wentz.models.User;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 

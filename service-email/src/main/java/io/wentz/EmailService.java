@@ -1,5 +1,6 @@
 package io.wentz;
 
+import io.wentz.ingester.KafkaIngester;
 import io.wentz.models.Email;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
