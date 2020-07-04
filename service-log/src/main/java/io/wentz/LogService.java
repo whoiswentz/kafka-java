@@ -25,7 +25,7 @@ public class LogService {
                 " partition: " + r.partition() +
                 " offset: " + r.offset() +
                 " timestamp: " + r.timestamp() +
-                " value: " + r.value()+
+                " value: " + r.value() +
                 " }");
     }
 }

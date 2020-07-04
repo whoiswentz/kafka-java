@@ -1,29 +1,27 @@
 package io.wentz;
 
-import io.wentz.ingester.KafkaIngester;
 import io.wentz.models.User;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Map;
 
-public class ReadingReportService {
-    private static final String klass = ReadingReportService.class.getName();
-    private static final KafkaIngester<User> ingester = new KafkaIngester<>(
-            klass,
-            "ECOMMERCE_USER_GENERATE_READING_REPORT",
-            ReadingReportService::parse,
-            Map.of());
-
+public class ReadingReportService implements ConsumerService<User> {
     private static final Path SOURCE = new File("src/main/resources/report.txt").toPath();
 
-    public static void main(String[] args) {
-        ingester.run();
+    @Override
+    public String getTopic() {
+        return "ECOMMERCE_USER_GENERATE_READING_REPORT";
     }
 
-    private static void parse(ConsumerRecord<String, Message<User>> r) throws IOException {
+    @Override
+    public String getConsumerGroup() {
+        return ReadingReportService.class.getSimpleName();
+    }
+
+    @Override
+    public void parse(ConsumerRecord<String, Message<User>> r) throws IOException {
         System.out.println(r.value());
 
         var user = r.value().getPayload();

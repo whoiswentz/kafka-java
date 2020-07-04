@@ -2,8 +2,8 @@ package io.wentz.ingester;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import io.wentz.MessageTypeAdapter;
 import io.wentz.Message;
+import io.wentz.MessageTypeAdapter;
 import org.apache.kafka.common.serialization.Deserializer;
 
 public class GsonDeserializer implements Deserializer<Message> {

@@ -2,7 +2,6 @@ package io.wentz.handlers;
 
 import io.wentz.CorrelationId;
 import io.wentz.dispatcher.KafkaDispatcher;
-import io.wentz.models.Email;
 import io.wentz.models.Order;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -16,9 +15,8 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 public class OrderServletOrder extends HttpServlet {
-    final KafkaDispatcher<Order> orderDispatcher = new KafkaDispatcher<>();
-
     private static final String NEW_ORDER_TOPIC = "ECOMMERCE_NEW_ORDER";
+    final KafkaDispatcher<Order> orderDispatcher = new KafkaDispatcher<>();
 
     @Override
     public void init(ServletConfig config) throws ServletException {

@@ -3,8 +3,6 @@ package io.wentz.ingester;
 import io.wentz.Message;
 import io.wentz.dispatcher.GsonSerializer;
 import io.wentz.dispatcher.KafkaDispatcher;
-import io.wentz.ingester.ConsumerFunction;
-import io.wentz.ingester.GsonDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -23,8 +21,8 @@ import java.util.regex.Pattern;
  * KafkaIngester is the abstraction to a kafka
  * client that consumes records from a Kafka cluster.
  *
- * @author Vinicios Wentz
  * @param <T>
+ * @author Vinicios Wentz
  */
 public class KafkaIngester<T> implements Closeable {
     private final KafkaConsumer<String, Message<T>> consumer;
@@ -81,7 +79,7 @@ public class KafkaIngester<T> implements Closeable {
      * Consumer configuration method, should
      * be used for custom configuration.
      *
-     * @param groupId - groupId of the consumer
+     * @param groupId            - groupId of the consumer
      * @param overrideProperties - properties that you want to override
      * @return the properties that will be configure the consumer
      */

@@ -13,12 +13,12 @@ public class FraudDetectorService {
     private static final String newOrderTopic = "ECOMMERCE_NEW_ORDER";
     private static final String rejectedOrderTopic = "ECOMMERCE_ORDER_REJECTED";
     private static final String approvedOrderTopic = "ECOMMERCE_ORDER_APPROVED";
+    private static final KafkaDispatcher<Order> dispatcher = new KafkaDispatcher<>();
     private static final KafkaIngester<Order> ingester = new KafkaIngester<>(
             klass,
             newOrderTopic,
             FraudDetectorService::parse,
             Map.of());
-    private static final KafkaDispatcher<Order> dispatcher = new KafkaDispatcher<>();
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         ingester.run();

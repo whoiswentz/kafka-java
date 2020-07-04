@@ -7,7 +7,7 @@ public class Order {
     private final BigDecimal amount;
     private final String email;
 
-    public Order( String orderId, BigDecimal ammount, String email) {
+    public Order(String orderId, BigDecimal ammount, String email) {
         this.orderId = orderId;
         this.amount = ammount;
         this.email = email;

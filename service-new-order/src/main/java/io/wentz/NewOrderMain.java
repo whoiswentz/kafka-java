@@ -1,7 +1,6 @@
 package io.wentz;
 
 import io.wentz.dispatcher.KafkaDispatcher;
-import io.wentz.models.Email;
 import io.wentz.models.Order;
 
 import java.math.BigDecimal;
