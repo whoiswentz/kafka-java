@@ -21,4 +21,8 @@ public class Order {
                 ", email=" + email +
                 '}';
     }
+
+    public String getOrderId() {
+        return orderId;
+    }
 }

@@ -4,18 +4,22 @@ import io.wentz.dispatcher.KafkaDispatcher;
 import models.Order;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
-import java.util.concurrent.ExecutionException;
-
 public class PrepareEmailNewOrderService implements ConsumerService<Order> {
     private static final KafkaDispatcher<String> dispatcher = new KafkaDispatcher<>();
 
-    public void parse(ConsumerRecord<String, Message<Order>> r) throws ExecutionException, InterruptedException {
+    public PrepareEmailNewOrderService() {
+        System.out.println("Constructed");
+    }
+
+    public void parse(ConsumerRecord<String, Message<Order>> r) {
+        System.out.println("Processing new order email");
+
         var order = r.value().getPayload();
         var emailCode = "New order email";
 
-        dispatcher.send("ECOMMERCE_SEND_EMAIL",
+        dispatcher.sendAsync("ECOMMERCE_SEND_EMAIL",
                 order.getEmail(),
-                r.value().getId().continueWith(PrepareEmailNewOrderService.class.getName()),
+                r.value().getId().continueWith(PrepareEmailNewOrderService.class.getSimpleName()),
                 emailCode);
     }
 
@@ -26,6 +30,6 @@ public class PrepareEmailNewOrderService implements ConsumerService<Order> {
 
     @Override
     public String getConsumerGroup() {
-        return PrepareEmailNewOrderService.class.getName();
+        return PrepareEmailNewOrderService.class.getSimpleName();
     }
 }

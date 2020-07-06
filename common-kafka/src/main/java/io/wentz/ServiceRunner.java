@@ -6,7 +6,7 @@ public class ServiceRunner<T> {
 
     private final ServiceProvider<T> provider;
 
-    public ServiceRunner(final ServiceFactory<T> factory) {
+    public ServiceRunner(ServiceFactory<T> factory) {
         this.provider = new ServiceProvider<>(factory);
     }
 

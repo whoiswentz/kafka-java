@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 public class LogService {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
+
         final var service = new KafkaIngester(
                 LogService.class.getName(),
                 Pattern.compile("ECOMMERCE.*"),

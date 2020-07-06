@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -34,20 +35,25 @@ public class OrderServletOrder extends HttpServlet {
         final var userEmail = req.getParameter("email");
         final var amount = new BigDecimal(req.getParameter("amount"));
 
-        final var orderId = UUID.randomUUID().toString();
-
+        final var orderId = req.getParameter("uuid");
         final var order = new Order(orderId, amount, userEmail);
 
         try {
-            var className = OrderServletOrder.class.getSimpleName();
-            orderDispatcher.send(NEW_ORDER_TOPIC, userEmail, new CorrelationId(className), order);
-        } catch (ExecutionException | InterruptedException e) {
+            try (var orderDatabase = new OrderDatabase("orders_database")) {
+                if (orderDatabase.saveOrder(order)) {
+                    var className = OrderServletOrder.class.getSimpleName();
+                    orderDispatcher.send(NEW_ORDER_TOPIC, userEmail, new CorrelationId(className), order);
+                    System.out.println(order.toString());
+                    resp.setStatus(HttpServletResponse.SC_OK);
+                    resp.getWriter().println("New order Sent");
+                } else {
+                    System.out.println(order.toString());
+                    resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    resp.getWriter().println("Old order");
+                }
+            }
+        } catch (ExecutionException | InterruptedException | SQLException e) {
             throw new ServletException(e);
         }
-
-        System.out.println(order.toString());
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().println("New order Sent");
-
     }
 }

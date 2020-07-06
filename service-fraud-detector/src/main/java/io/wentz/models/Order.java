@@ -26,6 +26,10 @@ public class Order {
                 '}';
     }
 
+    public String getOrderId() {
+        return orderId;
+    }
+
     public String getEmail() {
         return email;
     }
